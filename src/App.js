@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { db } from "./firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getCountFromServer } from "firebase/firestore";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 
@@ -29,8 +29,8 @@ function App() {
       await addDoc(collection(db, "emails"), { email });
       setEmail(""); // Clear the input field
       setLanding(false);
-      const snapshot = await getDocs(collection(db, "emails"));
-      setCount(snapshot.size); // Update the count with the number of documents
+      const snapshot = await getCountFromServer(collection(db, "emails"));
+      setCount(snapshot.data().count); // Update the count with the number of documents
     } catch (error) {
       console.error("Error adding email to Firestore:", error);
     }
